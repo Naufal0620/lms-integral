@@ -1,0 +1,30 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+class Question extends Model
+{
+    use HasFactory;
+
+    protected $fillable = ['quiz_id', 'lesson_slide_id', 'question_text', 'points'];
+
+    public function quiz(): BelongsTo
+    {
+        return $this->belongsTo(Quiz::class);
+    }
+
+    public function lessonSlide(): BelongsTo
+    {
+        return $this->belongsTo(LessonSlide::class);
+    }
+
+    public function options(): HasMany
+    {
+        return $this->hasMany(Option::class);
+    }
+}
