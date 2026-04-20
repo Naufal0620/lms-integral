@@ -33,7 +33,11 @@ class LessonController extends Controller
             $progress->completed_at = now();
             $progress->save();
             
-            $gamification->addXp(auth()->user(), $lesson->xp_reward);
+            $levelUp = $gamification->addXp(auth()->user(), $lesson->xp_reward);
+            
+            if ($levelUp) {
+                session()->flash('level_up', auth()->user()->level);
+            }
             
             return redirect()->route('topics.show', $lesson->topic_id)
                 ->with('status', "Pelajaran selesai! +{$lesson->xp_reward} XP didapatkan!");

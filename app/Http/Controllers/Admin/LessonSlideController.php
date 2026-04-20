@@ -25,7 +25,7 @@ class LessonSlideController extends Controller
         $validated = $request->validate([
             'title' => 'nullable|string|max:255',
             'content' => 'required',
-            'type' => 'required|in:content,quiz',
+            'type' => 'required|in:content',
             'order' => 'required|integer',
         ]);
 
@@ -40,7 +40,7 @@ class LessonSlideController extends Controller
 
     public function edit(Lesson $lesson, LessonSlide $slide)
     {
-        return view('admin.slides.edit', compact('lesson', $slide->id === null ? 'slide' : 'slide')); // Fix for possible undefined variable if not passed correctly
+        return view('admin.slides.edit', compact('lesson', 'slide'));
     }
 
     public function update(Request $request, Lesson $lesson, LessonSlide $slide)
@@ -48,7 +48,7 @@ class LessonSlideController extends Controller
         $validated = $request->validate([
             'title' => 'nullable|string|max:255',
             'content' => 'required',
-            'type' => 'required|in:content,quiz',
+            'type' => 'required|in:content',
             'order' => 'required|integer',
         ]);
 

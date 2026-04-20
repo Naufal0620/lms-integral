@@ -23,7 +23,6 @@ class LessonController extends Controller
             'title' => 'required|string|max:255',
             'order' => 'required|integer',
             'xp_reward' => 'required|integer',
-            'video_url' => 'nullable|url',
         ]);
 
         $validated['content'] = ''; // Legacy field
@@ -61,7 +60,6 @@ class LessonController extends Controller
             'title' => 'required|string|max:255',
             'order' => 'required|integer',
             'xp_reward' => 'required|integer',
-            'video_url' => 'nullable|url',
         ]);
 
         $lesson->update($validated);

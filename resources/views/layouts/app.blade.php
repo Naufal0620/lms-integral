@@ -85,5 +85,42 @@
             <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-500/10 dark:bg-blue-900/20 rounded-full blur-[120px]"></div>
             <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-indigo-500/10 dark:bg-indigo-900/20 rounded-full blur-[120px]"></div>
         </div>
+
+        <!-- Level Up Notification -->
+        @if(session('level_up'))
+        <div x-data="{ show: true }" x-show="show" 
+             class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm"
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0"
+             x-transition:enter-end="opacity-100"
+             x-cloak>
+            <div class="bg-white dark:bg-slate-800 rounded-[2.5rem] p-8 max-w-sm w-full text-center shadow-2xl relative overflow-hidden border-4 border-blue-600 animate-bounce-subtle"
+                 @click.outside="show = false">
+                <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-400 via-indigo-500 to-purple-600"></div>
+                <div class="mb-6 flex justify-center">
+                    <div class="relative">
+                        <div class="absolute inset-0 bg-blue-500 rounded-full blur-2xl opacity-20 animate-pulse"></div>
+                        <div class="w-24 h-24 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-3xl flex items-center justify-center text-white shadow-xl rotate-12 relative z-10">
+                            <i class='bx bxs-star text-5xl'></i>
+                        </div>
+                    </div>
+                </div>
+                <h3 class="text-3xl font-black text-slate-900 dark:text-white uppercase tracking-tighter mb-2 italic">LEVEL UP!</h3>
+                <p class="text-slate-500 dark:text-slate-400 font-medium mb-6">Luar biasa! Kamu sekarang berada di <span class="text-blue-600 dark:text-blue-400 font-bold uppercase">Level {{ session('level_up') }}</span></p>
+                <button @click="show = false" 
+                        class="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-black uppercase tracking-widest transition shadow-lg shadow-blue-500/20">
+                    Lanjutkan Belajar
+                </button>
+            </div>
+        </div>
+        <style>
+            @keyframes bounce-subtle {
+                0%, 100% { transform: translateY(0); }
+                50% { transform: translateY(-10px); }
+            }
+            .animate-bounce-subtle { animation: bounce-subtle 2s infinite ease-in-out; }
+            [x-cloak] { display: none !important; }
+        </style>
+        @endif
     </body>
 </html>

@@ -13,236 +13,168 @@ use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        // 1. Create Admin & Students with formal data
-        User::create([
-            'name' => 'Administrator LMS',
-            'email' => 'admin@integral.com',
-            'password' => Hash::make('password'),
-            'role' => 'admin',
-            'level' => 1,
-            'xp' => 0,
-            'coins' => 0,
-        ]);
+        // 1. Users
+        User::create(['name' => 'Administrator', 'email' => 'admin@integral.com', 'password' => Hash::make('password'), 'role' => 'admin', 'level' => 1, 'xp' => 0, 'coins' => 0]);
+        
+        $students = [
+            ['name' => 'Ahmad Fauzi', 'email' => 'ahmad@mahasiswa.ac.id'],
+            ['name' => 'Said M. Naufal', 'email' => 'said@mahasiswa.ac.id'],
+            ['name' => 'Rizky Pratama', 'email' => 'rizky@mahasiswa.ac.id'],
+            ['name' => 'Dewi Lestari', 'email' => 'dewi@mahasiswa.ac.id'],
+            ['name' => 'Bambang Pamungkas', 'email' => 'bambang@mahasiswa.ac.id'],
+        ];
 
-        User::create([
-            'name' => 'Budi Setiawan',
-            'email' => 'budi@mahasiswa.ac.id',
-            'password' => Hash::make('password'),
-            'role' => 'student',
-            'level' => 1,
-            'xp' => 0,
-            'coins' => 0,
-        ]);
+        foreach ($students as $student) {
+            User::create([
+                'name' => $student['name'],
+                'email' => $student['email'],
+                'password' => Hash::make('password'),
+                'role' => 'student',
+                'level' => 1,
+                'xp' => rand(0, 500), // Memberikan sedikit variasi XP awal untuk leaderboard
+                'coins' => 0
+            ]);
+        }
 
-        User::create([
-            'name' => 'Siti Aminah',
-            'email' => 'siti@mahasiswa.ac.id',
-            'password' => Hash::make('password'),
-            'role' => 'student',
-            'level' => 1,
-            'xp' => 0,
-            'coins' => 0,
-        ]);
-
-        // 2. Bab 1: Dasar-Dasar Integral (Integral Tak Tentu)
+        // 2. BAB 1: DASAR-DASAR INTEGRAL (DETAILED)
         $w1 = Topic::create([
             'title' => 'Dasar-Dasar Integral',
             'description' => 'Mempelajari konsep antiturunan, notasi integral, dan aturan pangkat dasar untuk fungsi aljabar.',
-            'order' => 1,
-            'required_level' => 1,
+            'order' => 1, 'required_level' => 1,
         ]);
 
-        Lesson::create([
-            'topic_id' => $w1->id,
-            'title' => 'Konsep Antiturunan',
-            'content' => 'Integral tak tentu pada dasarnya adalah operasi kebalikan dari turunan, yang disebut sebagai antiturunan.' . "\n\n" . 
-                         'Jika kita memiliki fungsi \(f(x)\), maka antiturunannya adalah fungsi \(F(x)\) sedemikian rupa sehingga \(F\'(x) = f(x)\).' . "\n\n" . 
-                         'Contoh Dasar:' . "\n" . 
-                         'Jika \(F(x) = x^2\), maka turunannya adalah \(2x\). Sebaliknya, integral dari \(2x\) adalah \(x^2\).',
-            'order' => 1,
-            'xp_reward' => 20,
+        // Materi 1.1: Konsep Antiturunan
+        $l1 = Lesson::create(['topic_id' => $w1->id, 'title' => 'Konsep Antiturunan & Notasi', 'order' => 1, 'xp_reward' => 30, 'content' => '']);
+        $l1->slides()->createMany([
+            ['title' => 'Definisi Antiturunan', 'type' => 'content', 'order' => 1, 'content' => ['blocks' => [
+                ['type' => 'header', 'data' => ['text' => 'Apa itu Antiturunan?', 'level' => 2]],
+                ['type' => 'paragraph', 'data' => ['text' => 'Integral tak tentu adalah proses menentukan fungsi asal jika turunannya diketahui. Inilah mengapa ia disebut <b>Antiturunan</b>.']],
+                ['type' => 'math', 'data' => ['formula' => 'F\'(x) = f(x) \implies \int f(x) dx = F(x) + C']]
+            ]]],
+            ['title' => 'Notasi Leibniz', 'type' => 'content', 'order' => 2, 'content' => ['blocks' => [
+                ['type' => 'header', 'data' => ['text' => 'Mengenal Simbol Integral', 'level' => 2]],
+                ['type' => 'paragraph', 'data' => ['text' => 'Simbol \(\int\) pertama kali digunakan oleh Gottfried Leibniz. Komponennya adalah:']],
+                ['type' => 'paragraph', 'data' => ['text' => '1. \(\int\) : Operator Integrasi<br>2. \(f(x)\) : Integran (fungsi yang diproses)<br>3. \(dx\) : Diferensial (menandakan variabel integrasi)']]
+            ]]],
+            ['title' => 'Konstanta Integrasi', 'type' => 'content', 'order' => 3, 'content' => ['blocks' => [
+                ['type' => 'header', 'data' => ['text' => 'Mengapa Ada +C?', 'level' => 3]],
+                ['type' => 'paragraph', 'data' => ['text' => 'Turunan dari \(x^2 + 5\), \(x^2 - 10\), dan \(x^2 + \pi\) semuanya adalah \(2x\).']],
+                ['type' => 'paragraph', 'data' => ['text' => 'Saat kita melakukan integral balik dari \(2x\), kita tidak tahu angka konstanta apa yang ada di sana sebelumnya. Maka kita gunakan \(C\).']]
+            ]]]
+        ]);
+        $q1 = Quiz::create(['lesson_id' => $l1->id, 'title' => 'Kuis Dasar & Notasi', 'description' => 'Evaluasi materi antiturunan', 'passing_score' => 80]);
+        $q1_1 = Question::create(['quiz_id' => $q1->id, 'question_text' => 'Jika turunan fungsi asal adalah f(x), maka integral f(x) disebut...', 'points' => 100]);
+        Option::create(['question_id' => $q1_1->id, 'option_text' => 'Antiturunan', 'is_correct' => true]);
+        Option::create(['question_id' => $q1_1->id, 'option_text' => 'Diferensial Kedua', 'is_correct' => false]);
+
+        // Materi 1.2: Aturan Pangkat
+        $l2 = Lesson::create(['topic_id' => $w1->id, 'title' => 'Aturan Pangkat Dasar', 'order' => 2, 'xp_reward' => 40, 'content' => '']);
+        $l2->slides()->createMany([
+            ['title' => 'Rumus Umum', 'type' => 'content', 'order' => 1, 'content' => ['blocks' => [
+                ['type' => 'header', 'data' => ['text' => 'Aturan Pangkat Aljabar', 'level' => 2]],
+                ['type' => 'math', 'data' => ['formula' => '\int x^n dx = \frac{1}{n+1} x^{n+1} + C']],
+                ['type' => 'paragraph', 'data' => ['text' => 'Aturan ini berlaku selama \(n \neq -1\).']]
+            ]]],
+            ['title' => 'Contoh Polinomial', 'type' => 'content', 'order' => 2, 'content' => ['blocks' => [
+                ['type' => 'paragraph', 'data' => ['text' => 'Contoh: \(\int x^5 dx\).']],
+                ['type' => 'paragraph', 'data' => ['text' => 'Langkah:<br>1. Tambahkan pangkat: \(5+1 = 6\)<br>2. Bagi dengan pangkat baru: \(\frac{1}{6}\)<br>3. Hasil: \(\frac{1}{6}x^6 + C\)']]
+            ]]]
+        ]);
+        $q2 = Quiz::create(['lesson_id' => $l2->id, 'title' => 'Kuis Aturan Pangkat', 'description' => 'Hitung integral pangkat', 'passing_score' => 80]);
+        $q2_1 = Question::create(['quiz_id' => $q2->id, 'question_text' => 'Berapakah hasil dari \(\int x^3 dx\)?', 'points' => 100]);
+        Option::create(['question_id' => $q2_1->id, 'option_text' => '1/4 x^4 + C', 'is_correct' => true]);
+        Option::create(['question_id' => $q2_1->id, 'option_text' => '3x^2 + C', 'is_correct' => false]);
+
+        // Evaluasi Akhir Bab 1
+        $qf1 = Quiz::create(['topic_id' => $w1->id, 'title' => 'Evaluasi Akhir: Dasar Integral', 'description' => 'Ujian kelulusan Bab 1', 'passing_score' => 75]);
+        $qf1_1 = Question::create(['quiz_id' => $qf1->id, 'question_text' => 'Selesaikan integral dari \(\int (2x + 1) dx\).', 'points' => 100]);
+        Option::create(['question_id' => $qf1_1->id, 'option_text' => 'x^2 + x + C', 'is_correct' => true]);
+        Option::create(['question_id' => $qf1_1->id, 'option_text' => '2x^2 + x + C', 'is_correct' => false]);
+
+
+        // 3. BAB 2: INTEGRAL TENTU
+        $w2 = Topic::create(['title' => 'Integral Tentu', 'description' => 'Penerapan integral pada interval tertutup untuk menghitung akumulasi dan nilai eksak.', 'order' => 2, 'required_level' => 1]);
+
+        // Materi 2.1: Definisi & Batas Integrasi
+        $l2_1 = Lesson::create(['topic_id' => $w2->id, 'title' => 'Definisi & Batas Integrasi', 'order' => 1, 'xp_reward' => 35, 'content' => '']);
+        $l2_1->slides()->createMany([
+            ['title' => 'Konsep Akumulasi', 'type' => 'content', 'order' => 1, 'content' => ['blocks' => [
+                ['type' => 'header', 'data' => ['text' => 'Integral sebagai Akumulasi', 'level' => 2]],
+                ['type' => 'paragraph', 'data' => ['text' => 'Berbeda dengan integral tak tentu yang menghasilkan fungsi, integral tentu menghasilkan sebuah <b>angka/nilai eksak</b>.']],
+                ['type' => 'paragraph', 'data' => ['text' => 'Ia mewakili akumulasi total nilai fungsi pada interval tertentu, yang secara geometris sering dikaitkan dengan luas daerah.']]
+            ]]],
+            ['title' => 'Notasi Integral Tentu', 'type' => 'content', 'order' => 2, 'content' => ['blocks' => [
+                ['type' => 'math', 'data' => ['formula' => '\int_{a}^{b} f(x) dx']],
+                ['type' => 'paragraph', 'data' => ['text' => 'Keterangan:<br>1. \(a\) : Batas bawah integrasi.<br>2. \(b\) : Batas atas integrasi.']]
+            ]]]
+        ]);
+        $q2_1 = Quiz::create(['lesson_id' => $l2_1->id, 'title' => 'Kuis Batas Integrasi', 'description' => 'Uji notasi', 'passing_score' => 80]);
+        $q2_1_1 = Question::create(['quiz_id' => $q2_1->id, 'question_text' => 'Apa hasil akhir dari perhitungan integral tentu?', 'points' => 100]);
+        Option::create(['question_id' => $q2_1_1->id, 'option_text' => 'Sebuah Nilai/Angka Konstan', 'is_correct' => true]);
+        Option::create(['question_id' => $q2_1_1->id, 'option_text' => 'Sebuah Fungsi Baru (+C)', 'is_correct' => false]);
+
+        // Materi 2.2: Teorema Dasar Kalkulus II
+        $l2_2 = Lesson::create(['topic_id' => $w2->id, 'title' => 'Teorema Dasar Kalkulus II', 'order' => 2, 'xp_reward' => 45, 'content' => '']);
+        $l2_2->slides()->createMany([
+            ['title' => 'Rumus Utama', 'type' => 'content', 'order' => 1, 'content' => ['blocks' => [
+                ['type' => 'header', 'data' => ['text' => 'Prosedur Hitung', 'level' => 2]],
+                ['type' => 'math', 'data' => ['formula' => '\int_{a}^{b} f(x) dx = [F(x)]_{a}^{b} = F(b) - F(a)']],
+                ['type' => 'paragraph', 'data' => ['text' => 'Langkah:<br>1. Cari antiturunan \(F(x)\).<br>2. Masukkan batas atas \(b\).<br>3. Masukkan batas bawah \(a\).<br>4. Kurangkan keduanya.']]
+            ]]],
+            ['title' => 'Contoh Soal', 'type' => 'content', 'order' => 2, 'content' => ['blocks' => [
+                ['type' => 'paragraph', 'data' => ['text' => 'Hitung \(\int_{1}^{3} 2x dx\).']],
+                ['type' => 'paragraph', 'data' => ['text' => '1. Antiturunan \(2x\) adalah \(x^2\).']],
+                ['type' => 'math', 'data' => ['formula' => '[x^2]_{1}^{3} = (3^2) - (1^2) = 9 - 1 = 8']]
+            ]]]
+        ]);
+        $q2_2 = Quiz::create(['lesson_id' => $l2_2->id, 'title' => 'Kuis Kalkulus II', 'description' => 'Hitung nilai integral', 'passing_score' => 80]);
+        $q2_2_1 = Question::create(['quiz_id' => $q2_2->id, 'question_text' => 'Hitunglah \(\int_{0}^{2} 3x^2 dx\).', 'points' => 100]);
+        Option::create(['question_id' => $q2_2_1->id, 'option_text' => '8', 'is_correct' => true]);
+        Option::create(['question_id' => $q2_2_1->id, 'option_text' => '4', 'is_correct' => false]);
+
+        // Materi 2.3: Sifat-Sifat Integral Tentu
+        $l2_3 = Lesson::create(['topic_id' => $w2->id, 'title' => 'Sifat-Sifat Integral Tentu', 'order' => 3, 'xp_reward' => 40, 'content' => '']);
+        $l2_3->slides()->createMany([
+            ['title' => 'Batas yang Sama', 'type' => 'content', 'order' => 1, 'content' => ['blocks' => [
+                ['type' => 'header', 'data' => ['text' => 'Batas Identik', 'level' => 3]],
+                ['type' => 'math', 'data' => ['formula' => '\int_{a}^{a} f(x) dx = 0']],
+                ['type' => 'paragraph', 'data' => ['text' => 'Jika batas atas dan bawah sama, maka luas daerahnya adalah nol.']]
+            ]]],
+            ['title' => 'Pembalikan Batas', 'type' => 'content', 'order' => 2, 'content' => ['blocks' => [
+                ['type' => 'header', 'data' => ['text' => 'Menukar Batas', 'level' => 3]],
+                ['type' => 'math', 'data' => ['formula' => '\int_{a}^{b} f(x) dx = -\int_{b}^{a} f(x) dx']]
+            ]]]
         ]);
 
-        Lesson::create([
-            'topic_id' => $w1->id,
-            'title' => 'Konstanta Integrasi (+C)',
-            'content' => 'Mengapa kita selalu menambahkan \(+C\) di akhir integral tak tentu?' . "\n\n" . 
-                         'Perhatikan fungsi-fungsi berikut:' . "\n" . 
-                         '1. \(y = x^2 + 5\)' . "\n" . 
-                         '2. \(y = x^2 - 10\)' . "\n" . 
-                         '3. \(y = x^2 + 100\)' . "\n\n" . 
-                         'Ketiganya memiliki turunan yang sama, yaitu \(2x\). Karena turunan dari konstanta adalah nol, kita kehilangan informasi tentang nilai konstanta asli saat melakukan integrasi. Oleh karena itu, kita melambangkannya dengan \(C\).',
-            'order' => 2,
-            'xp_reward' => 25,
-        ]);
+        // Evaluasi Akhir Bab 2
+        $qf2 = Quiz::create(['topic_id' => $w2->id, 'title' => 'Evaluasi Akhir: Integral Tentu', 'description' => 'Ujian komprehensif Bab 2', 'passing_score' => 80]);
+        $qf2_1 = Question::create(['quiz_id' => $qf2->id, 'question_text' => 'Manakah pernyataan yang benar?', 'points' => 100]);
+        Option::create(['question_id' => $qf2_1->id, 'option_text' => 'Integral tentu dari a ke a selalu nol', 'is_correct' => true]);
+        Option::create(['question_id' => $qf2_1->id, 'option_text' => 'Integral tentu selalu menghasilkan fungsi x', 'is_correct' => false]);
 
-        Lesson::create([
-            'topic_id' => $w1->id,
-            'title' => 'Aturan Pangkat Aljabar',
-            'content' => 'Ini adalah aturan paling mendasar dalam integrasi fungsi aljabar.' . "\n\n" . 
-                         'Rumus:' . "\n" . 
-                         '$$\int x^n dx = \frac{1}{n+1} x^{n+1} + C, \quad n \neq -1$$' . "\n\n" . 
-                         'Penting: Aturan ini berlaku untuk semua bilangan real \(n\) kecuali \(-1\). Mari kita lihat berbagai kasusnya di slide berikutnya.',
-            'order' => 3,
-            'xp_reward' => 30,
-        ]);
+        // 4. BAB 3: TEKNIK SUBSTITUSI
+        $w3 = Topic::create(['title' => 'Teknik Substitusi', 'description' => 'Metode u-substitution untuk integral kompleks.', 'order' => 3, 'required_level' => 2]);
+        Lesson::create(['topic_id' => $w3->id, 'title' => 'Metode Substitusi Sederhana', 'order' => 1, 'xp_reward' => 60, 'content' => '']);
+        Quiz::create(['topic_id' => $w3->id, 'title' => 'Evaluasi Akhir: Substitusi', 'description' => 'Ujian Bab 3', 'passing_score' => 80]);
 
-        Lesson::create([
-            'topic_id' => $w1->id,
-            'title' => 'Sifat Linearitas Integral',
-            'content' => 'Sifat linearitas memungkinkan kita untuk menyelesaikan integral dari penjumlahan fungsi atau fungsi dengan koefisien skalar.' . "\n\n" . 
-                         '1. Aturan Skalar:' . "\n" . 
-                         '$$\int k \cdot f(x) dx = k \int f(x) dx$$' . "\n\n" . 
-                         '2. Aturan Penjumlahan/Pengurangan:' . "\n" . 
-                         '$$\int [f(x) \pm g(x)] dx = \int f(x) dx \pm \int g(x) dx$$',
-            'order' => 4,
-            'xp_reward' => 35,
-        ]);
+        // 5. BAB 4: INTEGRAL TRIGONOMETRI
+        $w4 = Topic::create(['title' => 'Integral Trigonometri', 'description' => 'Pengintegralan fungsi sin, cos, dan tan.', 'order' => 4, 'required_level' => 3]);
+        Lesson::create(['topic_id' => $w4->id, 'title' => 'Integral Sinus dan Kosinus', 'order' => 1, 'xp_reward' => 60, 'content' => '']);
+        Quiz::create(['topic_id' => $w4->id, 'title' => 'Evaluasi Akhir: Trigonometri', 'description' => 'Ujian Bab 4', 'passing_score' => 80]);
 
-        $q1 = Quiz::create([
-            'topic_id' => $w1->id,
-            'title' => 'Latihan Kompetensi 1',
-            'description' => 'Evaluasi pemahaman mengenai definisi dan sifat-sifat dasar integral tak tentu.',
-            'passing_score' => 70,
-        ]);
+        // 6. BAB 5: LUAS DAERAH
+        $w5 = Topic::create(['title' => 'Aplikasi: Luas Daerah', 'description' => 'Menghitung luas di bawah kurva.', 'order' => 5, 'required_level' => 4]);
+        Lesson::create(['topic_id' => $w5->id, 'title' => 'Luas Antara Kurva dan Sumbu X', 'order' => 1, 'xp_reward' => 70, 'content' => '']);
+        Quiz::create(['topic_id' => $w5->id, 'title' => 'Evaluasi Akhir: Luas Daerah', 'description' => 'Ujian Bab 5', 'passing_score' => 80]);
 
-        $ques1 = Question::create(['quiz_id' => $q1->id, 'question_text' => 'Tentukan hasil integrasi dari \(\int (3x^2 + 2x) dx\).', 'points' => 10]);
-        Option::create(['question_id' => $ques1->id, 'option_text' => 'x^3 + x^2 + C', 'is_correct' => true]);
-        Option::create(['question_id' => $ques1->id, 'option_text' => '3x^3 + 2x^2 + C', 'is_correct' => false]);
-        Option::create(['question_id' => $ques1->id, 'option_text' => '6x + 2 + C', 'is_correct' => false]);
-        Option::create(['question_id' => $ques1->id, 'option_text' => 'x^3 + x + C', 'is_correct' => false]);
+        // 7. BAB 6: INTEGRAL PARSIAL
+        $w6 = Topic::create(['title' => 'Teknik Integrasi Parsial', 'description' => 'Metode pengalian turunan (LIATE).', 'order' => 6, 'required_level' => 5]);
+        Lesson::create(['topic_id' => $w6->id, 'title' => 'Konsep Integral Parsial', 'order' => 1, 'xp_reward' => 80, 'content' => '']);
+        Quiz::create(['topic_id' => $w6->id, 'title' => 'Evaluasi Akhir: Parsial', 'description' => 'Ujian Bab 6', 'passing_score' => 80]);
 
-        $ques2 = Question::create(['quiz_id' => $q1->id, 'question_text' => 'Apa peran konstanta C dalam hasil pengintegralan?', 'points' => 10]);
-        Option::create(['question_id' => $ques2->id, 'option_text' => 'Sebagai konstanta integrasi (keluarga fungsi)', 'is_correct' => true]);
-        Option::create(['question_id' => $ques2->id, 'option_text' => 'Sebagai variabel tambahan', 'is_correct' => false]);
-        Option::create(['question_id' => $ques2->id, 'option_text' => 'Sebagai penanda fungsi turunan', 'is_correct' => false]);
-        Option::create(['question_id' => $ques2->id, 'option_text' => 'Sebagai nilai rata-rata fungsi', 'is_correct' => false]);
-
-        // 3. Bab 2: Integral Tentu
-        $w2 = Topic::create([
-            'title' => 'Integral Tentu',
-            'description' => 'Menerapkan konsep integral pada interval tertutup untuk menghitung akumulasi atau luas daerah.',
-            'order' => 2,
-            'required_level' => 1,
-        ]);
-
-        Lesson::create([
-            'topic_id' => $w2->id,
-            'title' => 'Teorema Dasar Kalkulus II',
-            'content' => 'Teorema ini menghubungkan konsep turunan dan integral, menyatakan bahwa integral tentu dari suatu fungsi dapat dihitung menggunakan antiturunannya.' . "\n\n" . 
-                         '$$\int_{a}^{b} f(x) dx = [F(x)]_{a}^{b} = F(b) - F(a)$$' . "\n\n" . 
-                         'Di mana \(F\) adalah antiturunan dari \(f\). Sifat ini memungkinkan kita menghitung nilai eksak dari akumulasi tanpa harus melakukan limit penjumlahan Riemann yang rumit.',
-            'order' => 1,
-            'xp_reward' => 40,
-        ]);
-
-        $q2 = Quiz::create([
-            'topic_id' => $w2->id,
-            'title' => 'Latihan Kompetensi 2',
-            'description' => 'Uji kemampuan dalam menghitung nilai integral tentu pada interval yang diberikan.',
-            'passing_score' => 80,
-        ]);
-
-        $ques3 = Question::create(['quiz_id' => $q2->id, 'question_text' => 'Hitunglah nilai dari \(\int_{1}^{2} 2x dx\).', 'points' => 20]);
-        Option::create(['question_id' => $ques3->id, 'option_text' => '3', 'is_correct' => true]);
-        Option::create(['question_id' => $ques3->id, 'option_text' => '4', 'is_correct' => false]);
-        Option::create(['question_id' => $ques3->id, 'option_text' => '2', 'is_correct' => false]);
-        Option::create(['question_id' => $ques3->id, 'option_text' => '5', 'is_correct' => false]);
-
-        // 4. Bab 3: Teknik Integrasi Substitusi
-        $w3 = Topic::create([
-            'title' => 'Teknik Integrasi Substitusi',
-            'description' => 'Metode substitusi digunakan untuk menyelesaikan integral dengan menyederhanakan bentuk fungsi melalui variabel perantara.',
-            'order' => 3,
-            'required_level' => 1,
-        ]);
-
-        Lesson::create([
-            'topic_id' => $w3->id,
-            'title' => 'Metode Substitusi Sederhana',
-            'content' => 'Metode substitusi adalah teknik yang membalikkan aturan rantai dalam turunan. Tujuannya adalah untuk mengubah bentuk integral yang rumit menjadi bentuk standar yang lebih mudah diselesaikan.' . "\n\n" . 
-                         'Langkah-langkah Utama:' . "\n" . 
-                         '1. Tentukan bagian fungsi yang akan dijadikan \(u\). Pilih bagian yang jika diturunkan, hasilnya ada di dalam integral tersebut.' . "\n" . 
-                         '2. Hitung turunan \(u\) terhadap \(x\) untuk mendapatkan \(du = f\'(x) dx\).' . "\n" . 
-                         '3. Substitusikan \(u\) dan \(du\) ke dalam integral asli.' . "\n" . 
-                         '4. Selesaikan integral dalam variabel \(u\), lalu kembalikan ke variabel \(x\).' . "\n\n" . 
-                         'Contoh: ' . "\n" . 
-                         '$$\int (2x+1)^5 dx$$' . "\n" . 
-                         'Misalkan \(u = 2x+1\), maka \(du = 2 dx\) atau \(dx = \frac{1}{2} du\).' . "\n" . 
-                         'Integral menjadi: \(\int u^5 \cdot \frac{1}{2} du = \frac{1}{2} \cdot \frac{1}{6} u^6 + C = \frac{1}{12}(2x+1)^6 + C\).',
-            'order' => 1,
-            'xp_reward' => 60,
-        ]);
-
-        // 5. Bab 4: Integral Fungsi Trigonometri
-        $w4 = Topic::create([
-            'title' => 'Integral Fungsi Trigonometri',
-            'description' => 'Mempelajari teknik pengintegralan untuk fungsi-fungsi sinus, kosinus, dan fungsi trigonometri lainnya.',
-            'order' => 4,
-            'required_level' => 1,
-        ]);
-
-        Lesson::create([
-            'topic_id' => $w4->id,
-            'title' => 'Integral Sinus dan Kosinus',
-            'content' => 'Pengintegralan fungsi trigonometri dasar memerlukan pemahaman tentang turunan trigonometri yang dibalik.' . "\n\n" . 
-                         'Rumus Dasar Pengintegralan:' . "\n" . 
-                         '$$\int \sin(x) dx = -\cos(x) + C$$' . "\n" . 
-                         '$$\int \cos(x) dx = \sin(x) + C$$' . "\n\n" . 
-                         'Perlu diperhatikan tanda negatif pada hasil integral sinus, hal ini dikarenakan turunan dari \(\cos(x)\) adalah \(-\sin(x)\). Untuk fungsi dengan argumen linear seperti \(\int \sin(ax+b) dx\), hasilnya adalah \(-\frac{1}{a} \cos(ax+b) + C\).',
-            'order' => 1,
-            'xp_reward' => 50,
-        ]);
-
-        // 6. Bab 5: Aplikasi Integral - Luas Daerah
-        $w5 = Topic::create([
-            'title' => 'Aplikasi Integral: Luas Daerah',
-            'description' => 'Menggunakan integral tentu untuk menghitung luas daerah yang dibatasi oleh kurva dan sumbu koordinat.',
-            'order' => 5,
-            'required_level' => 1,
-        ]);
-
-        Lesson::create([
-            'topic_id' => $w5->id,
-            'title' => 'Luas di Bawah Kurva',
-            'content' => 'Salah satu aplikasi paling nyata dari integral tentu adalah menghitung luas daerah yang memiliki batas melengkung (kurva).' . "\n\n" . 
-                         'Jika sebuah fungsi \(f(x)\) bernilai positif (berada di atas sumbu X) pada interval \([a, b]\), maka luas daerah antara kurva tersebut dengan sumbu X dihitung dengan:' . "\n" . 
-                         '$$L = \int_{a}^{b} f(x) dx$$' . "\n\n" . 
-                         'Jika kurva berada di bawah sumbu X, hasil integral akan bernilai negatif, sehingga kita perlu mengambil nilai mutlaknya untuk menyatakan luas daerah.',
-            'order' => 1,
-            'xp_reward' => 70,
-        ]);
-
-        // 7. Bab 6: Teknik Integrasi Parsial
-        $w6 = Topic::create([
-            'title' => 'Teknik Integrasi Parsial',
-            'description' => 'Metode integrasi yang digunakan ketika substitusi gagal, didasarkan pada aturan perkalian turunan.',
-            'order' => 6,
-            'required_level' => 1,
-        ]);
-
-        Lesson::create([
-            'topic_id' => $w6->id,
-            'title' => 'Konsep Integral Parsial',
-            'content' => 'Metode integrasi parsial didasarkan pada aturan perkalian (product rule) pada turunan. Metode ini sangat berguna ketika kita menghadapi perkalian dua fungsi yang berbeda jenis, misalnya polinomial dengan eksponensial.' . "\n\n" . 
-                         'Rumus Dasar:' . "\n" . 
-                         '$$\int u dv = uv - \int v du$$' . "\n\n" . 
-                         'Strategi Memilih \(u\) (Aturan LIATE):' . "\n" . 
-                         'Prioritaskan pemilihan \(u\) sesuai urutan: <b>L</b>ogarithmic, <b>I</b>nverse Trig, <b>A</b>lgebraic, <b>T</b>rigonometric, <b>E</b>xponential.' . "\n" .
-                         'Pilihlah \(u\) yang jika diturunkan akan menjadi lebih sederhana.',
-            'order' => 1,
-            'xp_reward' => 80,
-        ]);
-
-        // 8. Run Content Expansion
+        // Call additional expansion seeders if needed
         $this->call(ContentExpansionSeeder::class);
-
-        // 9. Convert existing lesson content to slides
-        $this->call(ConvertLessonsToSlidesSeeder::class);
     }
 }

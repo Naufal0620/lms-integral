@@ -18,6 +18,9 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="font-bold uppercase text-[10px] tracking-widest">
                         {{ __('Materi') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('leaderboard')" :active="request()->routeIs('leaderboard')" class="font-bold uppercase text-[10px] tracking-widest">
+                        {{ __('Leaderboard') }}
+                    </x-nav-link>
                     @if(auth()->user()->isAdmin())
                         <x-nav-link :href="route('admin.topics.index')" :active="request()->routeIs('admin.*')" class="font-bold uppercase text-[10px] tracking-widest">
                             {{ __('Panel Admin') }}
@@ -111,6 +114,9 @@
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="font-bold uppercase text-[10px] tracking-widest">
                 {{ __('Materi') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('leaderboard')" :active="request()->routeIs('leaderboard')" class="font-bold uppercase text-[10px] tracking-widest">
+                {{ __('Leaderboard') }}
             </x-responsive-nav-link>
             @if(auth()->user()->isAdmin())
                 <x-responsive-nav-link :href="route('admin.topics.index')" :active="request()->routeIs('admin.*')" class="font-bold uppercase text-[10px] tracking-widest">

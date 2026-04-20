@@ -11,7 +11,7 @@ class Lesson extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['topic_id', 'title', 'content', 'order', 'xp_reward', 'video_url'];
+    protected $fillable = ['topic_id', 'title', 'content', 'order', 'xp_reward'];
 
     public function topic(): BelongsTo
     {

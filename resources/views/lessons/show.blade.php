@@ -54,54 +54,12 @@
                                     <div class="w-full">
                                         <x-editorjs-renderer :content="$slide->content" />
                                     </div>
-                                @elseif($slide->type === 'visualization')
-                                    {{-- Legacy fallback for visualization type slides --}}
+                                @else
                                     <div class="w-full">
                                         <h3 class="text-lg sm:text-2xl md:text-3xl font-black text-slate-900 dark:text-white uppercase italic mb-5 sm:mb-8 border-l-4 border-blue-600 pl-3 sm:pl-4 leading-tight">
                                             {{ $slide->title ?? 'Visualisasi Konsep' }}
                                         </h3>
                                         <x-visualization :data="$slide->visualization_data" />
-                                    </div>
-                                @else                                    <div class="flex-grow flex flex-col justify-center" x-data="{ answered: false, correct: false, selected: null }">
-                                        @if($slide->questions->isNotEmpty())
-                                            <div class="mb-6 sm:mb-10 text-center">
-                                                <span class="px-3 py-1 bg-amber-100 dark:bg-amber-500/20 text-amber-700 dark:text-amber-400 rounded-full text-[8px] sm:text-[10px] font-black uppercase tracking-[0.2em] italic border border-amber-200 dark:border-amber-500/20">
-                                                    Kuis Cepat
-                                                </span>
-                                                <h3 class="text-lg sm:text-2xl md:text-3xl font-black text-slate-900 dark:text-white italic mt-4 sm:mt-6 leading-tight">
-                                                    {{ $slide->questions->first()->question_text }}
-                                                </h3>
-                                            </div>
-
-                                            <div class="grid gap-3 sm:gap-4 max-w-2xl mx-auto w-full">
-                                                @foreach($slide->questions->first()->options as $option)
-                                                    <button 
-                                                        @click="if(!answered) { answered = true; selected = {{ $option->id }}; correct = {{ $option->is_correct ? 'true' : 'false' }}; }"
-                                                        class="relative p-4 sm:p-6 rounded-xl sm:rounded-2xl border-2 transition-all text-left font-bold text-sm sm:text-lg group overflow-hidden"
-                                                        :class="{
-                                                            'bg-white dark:bg-slate-800 border-slate-100 dark:border-white/5 active:border-blue-500': !answered,
-                                                            'bg-emerald-50 dark:bg-emerald-500/10 border-emerald-500 text-emerald-700 dark:text-emerald-400': answered && {{ $option->is_correct ? 'true' : 'false' }},
-                                                            'bg-red-50 dark:bg-red-500/10 border-red-500 text-red-700 dark:text-red-400': answered && selected === {{ $option->id }} && !{{ $option->is_correct ? 'true' : 'false' }},
-                                                            'bg-slate-50 dark:bg-slate-800/50 border-slate-100 dark:border-white/5 opacity-50': answered && selected !== {{ $option->id }} && !{{ $option->is_correct ? 'true' : 'false' }}
-                                                        }">
-                                                        <span class="relative z-10">{{ $option->option_text }}</span>
-                                                        <div x-show="answered && {{ $option->is_correct ? 'true' : 'false' }}" class="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2">
-                                                            <i class='bx bxs-check-circle text-xl sm:text-2xl'></i>
-                                                        </div>
-                                                    </button>
-                                                @endforeach
-                                            </div>
-
-                                            <div x-show="answered" x-transition class="mt-6 sm:mt-8 text-center">
-                                                <p x-show="correct" class="text-emerald-600 dark:text-emerald-400 font-black italic uppercase tracking-widest text-[10px] sm:text-sm">Hebat! Jawaban Anda Benar.</p>
-                                                <p x-show="!correct" class="text-red-600 dark:text-red-400 font-black italic uppercase tracking-widest text-[10px] sm:text-sm">Ups! Coba perhatikan lagi materinya.</p>
-                                            </div>
-                                        @else
-                                            <div class="text-center py-10">
-                                                <i class='bx bx-loader-alt animate-spin text-4xl text-slate-300 mb-4'></i>
-                                                <p class="text-slate-500 italic text-sm">Kuis sedang disiapkan...</p>
-                                            </div>
-                                        @endif
                                     </div>
                                 @endif
                             </div>

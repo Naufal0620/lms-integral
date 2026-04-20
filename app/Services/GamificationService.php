@@ -8,21 +8,24 @@ class GamificationService
 {
     /**
      * Add XP to user and check for level up.
+     * Returns true if user leveled up.
      */
-    public function addXp(User $user, int $amount): void
+    public function addXp(User $user, int $amount): bool
     {
+        $oldLevel = $user->level;
         $user->xp += $amount;
         
         // Basic level formula: Level = floor(sqrt(XP / 100)) + 1
-        // Example: 100 XP = Lvl 2, 400 XP = Lvl 3, 900 XP = Lvl 4
         $newLevel = (int) floor(sqrt($user->xp / 100)) + 1;
         
-        if ($newLevel > $user->level) {
+        $levelUp = false;
+        if ($newLevel > $oldLevel) {
             $user->level = $newLevel;
-            // Optionally: dispatch level up event
+            $levelUp = true;
         }
         
         $user->save();
+        return $levelUp;
     }
 
     /**

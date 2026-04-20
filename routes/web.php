@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TopicController;
 use App\Http\Controllers\LessonController;
 use App\Http\Controllers\QuizController;
+use App\Http\Controllers\LeaderboardController;
 use App\Http\Controllers\Admin\TopicController as AdminTopicController;
 use Illuminate\Support\Facades\Route;
 
@@ -13,6 +14,7 @@ Route::get('/', function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [TopicController::class, 'index'])->name('dashboard');
+    Route::get('/leaderboard', [LeaderboardController::class, 'index'])->name('leaderboard');
     
     Route::get('/topics/{topic}', [TopicController::class, 'show'])->name('topics.show');
     Route::get('/lessons/{lesson}', [LessonController::class, 'show'])->name('lessons.show');

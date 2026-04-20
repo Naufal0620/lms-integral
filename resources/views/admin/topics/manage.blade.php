@@ -38,15 +38,6 @@
                                         <h4 class="font-black text-slate-700 dark:text-slate-200 uppercase tracking-tight">{{ $lesson->title }}</h4>
                                         <div class="flex items-center mt-1 space-x-3">
                                             <span class="text-[9px] font-black text-blue-500 uppercase tracking-widest">{{ $lesson->slides->count() }} Slide</span>
-                                            @if($lesson->quiz)
-                                                <span class="text-[9px] font-black text-emerald-500 uppercase tracking-widest flex items-center">
-                                                    <i class='bx bxs-check-circle me-1'></i> Evaluasi Aktif
-                                                </span>
-                                            @else
-                                                <span class="text-[9px] font-black text-amber-500 uppercase tracking-widest flex items-center">
-                                                    <i class='bx bxs-error-circle me-1'></i> Belum Ada Evaluasi
-                                                </span>
-                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -54,19 +45,9 @@
                                     <a href="{{ route('admin.lessons.slides.index', $lesson) }}" class="p-2 text-slate-400 hover:text-blue-600 transition-colors" title="Kelola Isi Slide">
                                         <i class='bx bx-slideshow text-2xl'></i>
                                     </a>
-                                    @if($lesson->quiz)
-                                        <a href="{{ route('admin.quizzes.questions.index', $lesson->quiz) }}" class="p-2 text-slate-400 hover:text-emerald-600 transition-colors" title="Kelola Soal Evaluasi">
-                                            <i class='bx bx-list-ul text-2xl'></i>
-                                        </a>
-                                    @else
-                                        <a href="{{ route('admin.quizzes.create', ['lesson_id' => $lesson->id, 'topic_id' => $topic->id]) }}" class="p-2 text-amber-400 hover:text-amber-500 transition-colors" title="Tambah Evaluasi">
-                                            <i class='bx bx-plus-circle text-2xl'></i>
-                                        </a>
-                                    @endif
                                     <a href="{{ route('admin.lessons.edit', $lesson) }}" class="p-2 text-slate-400 hover:text-blue-600 transition-colors" title="Edit Materi">
                                         <i class='bx bx-edit-alt text-xl'></i>
-                                    </a>
-                                    <form action="{{ route('admin.lessons.destroy', $lesson) }}" method="POST" onsubmit="return confirm('Hapus materi ini?');">
+                                    </a>                                    <form action="{{ route('admin.lessons.destroy', $lesson) }}" method="POST" onsubmit="return confirm('Hapus materi ini?');">
                                         @csrf @method('DELETE')
                                         <button type="submit" class="p-2 text-slate-400 hover:text-red-600 transition-colors">
                                             <i class='bx bx-trash text-xl'></i>
@@ -85,11 +66,11 @@
             <div class="bg-white dark:bg-[#1e293b] overflow-hidden shadow-2xl rounded-[2.5rem] border-2 border-slate-100 dark:border-white/5 p-8 md:p-10">
                 <div class="flex flex-col md:flex-row md:items-center justify-between mb-10 gap-4">
                     <div class="flex items-center">
-                        <i class='bx bx-edit-alt me-3 text-emerald-600 text-3xl'></i>
-                        <h3 class="text-2xl font-black text-slate-800 dark:text-white uppercase tracking-tighter italic">Daftar Evaluasi</h3>
+                        <i class='bx bxs-award me-3 text-emerald-600 text-3xl'></i>
+                        <h3 class="text-2xl font-black text-slate-800 dark:text-white uppercase tracking-tighter italic">Evaluasi Akhir Bab</h3>
                     </div>
                     <a href="{{ route('admin.quizzes.create', ['topic_id' => $topic->id]) }}" class="rpg-button bg-emerald-600 text-white text-[10px] font-black uppercase px-6 py-3 rounded-xl shadow-lg shadow-emerald-500/20 flex items-center italic tracking-widest">
-                        <i class='bx bx-plus me-1'></i> Tambah Evaluasi
+                        <i class='bx bx-plus me-1'></i> Tambah Evaluasi Baru
                     </a>
                 </div>
 

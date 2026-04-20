@@ -13,13 +13,14 @@
         </div>
     </x-slot>
 
-    <div class="py-12" x-data="{ type: '{{ old('type', $slide->type) }}' }">
+    <div class="py-12">
         <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-[#1e293b] overflow-hidden shadow-2xl rounded-[2.5rem] border-2 border-slate-100 dark:border-white/5 p-8 md:p-12 relative">
                 <form id="slide-form" method="POST" action="{{ route('admin.lessons.slides.update', [$lesson, $slide]) }}" class="space-y-8">
                     @csrf
                     @method('PATCH')
                     <input type="hidden" name="content" id="content-json">
+                    <input type="hidden" name="type" value="content">
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div>
@@ -27,29 +28,16 @@
                             <x-text-input id="title" class="block mt-1 w-full" type="text" name="title" :value="old('title', $slide->title)" required />
                         </div>
                         <div>
-                            <x-input-label for="type" :value="__('Tipe Slide')" />
-                            <select id="type" name="type" x-model="type" class="block mt-1 w-full bg-slate-50 dark:bg-slate-900/50 border-2 border-slate-100 dark:border-white/5 focus:border-blue-500 focus:ring-0 rounded-2xl px-4 py-3 text-slate-900 dark:text-white transition duration-200 font-medium shadow-sm">
-                                <option value="content">Blok Materi (Editor.js)</option>
-                                <option value="quiz">Kuis Cepat</option>
-                            </select>
+                            <x-input-label for="order" :value="__('Urutan')" />
+                            <x-text-input id="order" class="block mt-1 w-full" type="number" name="order" :value="old('order', $slide->order)" required />
                         </div>
                     </div>
 
-                    <div x-show="type === 'content'" class="space-y-4">
+                    <div class="space-y-4">
                         <x-input-label :value="__('Konten Materi (Blok)')" />
                         <div class="bg-slate-50 dark:bg-slate-900/50 border-2 border-slate-100 dark:border-white/5 rounded-[2rem] p-8 min-h-[400px]">
                             <div id="editorjs" class="prose prose-slate dark:prose-invert max-w-none"></div>
                         </div>
-                    </div>
-
-                    <div x-show="type === 'quiz'" class="p-10 bg-emerald-50 dark:bg-emerald-500/10 rounded-[2rem] border-2 border-emerald-100 dark:border-emerald-500/20 text-center">
-                        <i class='bx bx-question-mark text-5xl text-emerald-500 mb-4'></i>
-                        <p class="text-emerald-700 dark:text-emerald-400 font-bold uppercase tracking-tight italic">Tipe Slide Kuis terpilih.</p>
-                    </div>
-
-                    <div class="w-32">
-                        <x-input-label for="order" :value="__('Urutan')" />
-                        <x-text-input id="order" class="block mt-1 w-full" type="number" name="order" :value="old('order', $slide->order)" required />
                     </div>
 
                     <div class="pt-6">

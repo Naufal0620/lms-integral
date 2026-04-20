@@ -6,9 +6,9 @@
             </a>
             <div>
                 <h2 class="font-black text-3xl text-slate-900 dark:text-white leading-tight tracking-tighter uppercase italic">
-                    Edit <span class="text-blue-600">Stage</span>
+                    Edit <span class="text-blue-600">Materi</span>
                 </h2>
-                <p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Perbarui materi pahlawan.</p>
+                <p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Perbarui materi untuk mahasiswa.</p>
             </div>
         </div>
     </x-slot>
@@ -28,23 +28,17 @@
                         <x-input-error :messages="$errors->get('title')" class="mt-2" />
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        <!-- Order -->
-                        <div>
-                            <x-input-label for="order" :value="__('Urutan Stage')" />
-                            <x-text-input id="order" class="block mt-1 w-full" type="number" name="order" :value="old('order', $lesson->order)" required />
-                        </div>
-
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <!-- XP Reward -->
                         <div>
                             <x-input-label for="xp_reward" :value="__('Reward XP')" />
                             <x-text-input id="xp_reward" class="block mt-1 w-full" type="number" name="xp_reward" :value="old('xp_reward', $lesson->xp_reward)" required />
                         </div>
 
-                        <!-- Video URL -->
+                        <!-- Order -->
                         <div>
-                            <x-input-label for="video_url" :value="__('YouTube URL (Opsional)')" />
-                            <x-text-input id="video_url" class="block mt-1 w-full" type="url" name="video_url" :value="old('video_url', $lesson->video_url)" placeholder="https://youtube.com/..." />
+                            <x-input-label for="order" :value="__('Urutan')" />
+                            <x-text-input id="order" class="block mt-1 w-full" type="number" name="order" :value="old('order', $lesson->order)" required />
                         </div>
                     </div>
 
