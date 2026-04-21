@@ -155,10 +155,6 @@
                             
                             <!-- Screen Content -->
                             <div class="relative h-full w-full bg-slate-100 dark:bg-slate-900 overflow-hidden">
-                                <!-- Placeholder Gambar Beranda Level -->
-                                <img src="https://images.unsplash.com/photo-1614332284112-2ad884487a9a?q=80&w=500&auto=format&fit=crop" 
-                                     class="w-full h-full object-cover opacity-90 dark:opacity-60" 
-                                     alt="Preview App">
                                 
                                 <!-- Overlay UI (Mocking the App Header/Elements) -->
                                 <div class="absolute inset-0 p-5 flex flex-col justify-between pointer-events-none">
