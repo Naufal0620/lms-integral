@@ -87,6 +87,21 @@ class DatabaseSeeder extends Seeder
         Option::create(['question_id' => $q2_1->id, 'option_text' => '1/4 x^4 + C', 'is_correct' => true]);
         Option::create(['question_id' => $q2_1->id, 'option_text' => '3x^2 + C', 'is_correct' => false]);
 
+        // Materi 1.3: Integrasi Fungsi Pangkat Sederhana (Moved from ContentExpansion)
+        $l1_3 = Lesson::create(['topic_id' => $w1->id, 'title' => 'Integrasi Fungsi Pangkat Sederhana', 'order' => 3, 'xp_reward' => 30, 'content' => '']);
+        $l1_3->slides()->createMany([
+            ['title' => 'Akar & Pangkat Negatif', 'type' => 'content', 'order' => 1, 'content' => ['blocks' => [
+                ['type' => 'header', 'data' => ['text' => 'Bentuk Akar dan Pecahan', 'level' => 2]],
+                ['type' => 'paragraph', 'data' => ['text' => 'Ubah bentuk akar atau pecahan menjadi pangkat sebelum diintegralkan.']],
+                ['type' => 'math', 'data' => ['formula' => '\int \sqrt{x} dx = \int x^{1/2} dx = \frac{2}{3}x^{3/2} + C']],
+                ['type' => 'math', 'data' => ['formula' => '\int \frac{1}{x^2} dx = \int x^{-2} dx = -x^{-1} + C = -\frac{1}{x} + C']]
+            ]]]
+        ]);
+        $q1_3 = Quiz::create(['lesson_id' => $l1_3->id, 'title' => 'Kuis Pangkat Variasi', 'description' => 'Integral akar dan pecahan', 'passing_score' => 80]);
+        $q1_3_1 = Question::create(['quiz_id' => $q1_3->id, 'question_text' => 'Berapakah hasil dari \(\int x^{-3} dx\)?', 'points' => 100]);
+        Option::create(['question_id' => $q1_3_1->id, 'option_text' => '-1/2 x^-2 + C', 'is_correct' => true]);
+        Option::create(['question_id' => $q1_3_1->id, 'option_text' => '-1/4 x^-4 + C', 'is_correct' => false]);
+
         // Evaluasi Akhir Bab 1
         $qf1 = Quiz::create(['topic_id' => $w1->id, 'title' => 'Evaluasi Akhir: Dasar Integral', 'description' => 'Ujian kelulusan Bab 1', 'passing_score' => 75]);
         $qf1_1 = Question::create(['quiz_id' => $qf1->id, 'question_text' => 'Selesaikan integral dari \(\int (2x + 1) dx\).', 'points' => 100]);
@@ -105,7 +120,16 @@ class DatabaseSeeder extends Seeder
                 ['type' => 'paragraph', 'data' => ['text' => 'Berbeda dengan integral tak tentu yang menghasilkan fungsi, integral tentu menghasilkan sebuah <b>angka/nilai eksak</b>.']],
                 ['type' => 'paragraph', 'data' => ['text' => 'Ia mewakili akumulasi total nilai fungsi pada interval tertentu, yang secara geometris sering dikaitkan dengan luas daerah.']]
             ]]],
-            ['title' => 'Notasi Integral Tentu', 'type' => 'content', 'order' => 2, 'content' => ['blocks' => [
+            ['title' => 'Visualisasi Grafik', 'type' => 'visualization', 'order' => 2, 'visualization_data' => [
+                'title' => 'Integral sebagai Luas Daerah',
+                'boundingbox' => [-1, 5, 5, -1],
+                'elements' => [
+                    ['type' => 'integral', 'formula' => '0.5*x + 1', 'start' => 1, 'end' => 4, 'color' => '#3b82f6'],
+                    ['type' => 'function', 'formula' => '0.5*x + 1', 'color' => '#1e293b'],
+                ],
+                'footer' => 'Daerah yang diarsir biru adalah nilai dari \(\int_{1}^{4} (0.5x + 1) dx\).'
+            ]],
+            ['title' => 'Notasi Integral Tentu', 'type' => 'content', 'order' => 3, 'content' => ['blocks' => [
                 ['type' => 'math', 'data' => ['formula' => '\int_{a}^{b} f(x) dx']],
                 ['type' => 'paragraph', 'data' => ['text' => 'Keterangan:<br>1. \(a\) : Batas bawah integrasi.<br>2. \(b\) : Batas atas integrasi.']]
             ]]]
@@ -147,6 +171,10 @@ class DatabaseSeeder extends Seeder
                 ['type' => 'math', 'data' => ['formula' => '\int_{a}^{b} f(x) dx = -\int_{b}^{a} f(x) dx']]
             ]]]
         ]);
+        $q2_3 = Quiz::create(['lesson_id' => $l2_3->id, 'title' => 'Kuis Sifat Integral', 'description' => 'Uji pemahaman sifat', 'passing_score' => 80]);
+        $q2_3_1 = Question::create(['quiz_id' => $q2_3->id, 'question_text' => 'Berapakah nilai dari \(\int_{5}^{5} x^{100} dx\)?', 'points' => 100]);
+        Option::create(['question_id' => $q2_3_1->id, 'option_text' => '0', 'is_correct' => true]);
+        Option::create(['question_id' => $q2_3_1->id, 'option_text' => '5^101 / 101', 'is_correct' => false]);
 
         // Evaluasi Akhir Bab 2
         $qf2 = Quiz::create(['topic_id' => $w2->id, 'title' => 'Evaluasi Akhir: Integral Tentu', 'description' => 'Ujian komprehensif Bab 2', 'passing_score' => 80]);

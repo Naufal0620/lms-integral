@@ -17,25 +17,7 @@ class ContentExpansionSeeder extends Seeder
             return;
         }
 
-        // 1. Dasar-Dasar Integral (Topic 1)
-        $t1 = $topics[0];
-        Lesson::create([
-            'topic_id' => $t1->id,
-            'title' => 'Integrasi Fungsi Pangkat Sederhana',
-            'content' => 'Aturan pangkat adalah aturan dasar yang paling sering digunakan dalam kalkulus integral.' . "\n\n" . 'Rumus Umum:' . "\n" . '$$\int x^n dx = \frac{x^{n+1}}{n+1} + C, \quad n \neq -1$$' . "\n\n" . 'Contoh:' . "\n" . '$$\int x^4 dx = \frac{x^5}{5} + C$$' . "\n" . '$$\int \sqrt{x} dx = \int x^{1/2} dx = \frac{x^{3/2}}{3/2} + C = \frac{2}{3}x\sqrt{x} + C$$',
-            'order' => 3,
-            'xp_reward' => 30,
-        ]);
-
-        // 2. Integral Tentu (Topic 2)
-        $t2 = $topics[1];
-        Lesson::create([
-            'topic_id' => $t2->id,
-            'title' => 'Sifat-Sifat Integral Tentu',
-            'content' => 'Integral tentu memiliki beberapa sifat penting yang memudahkan perhitungan:' . "\n\n" . '1. Batas yang sama:' . "\n" . '$$\int_{a}^{a} f(x) dx = 0$$' . "\n\n" . '2. Batas terbalik:' . "\n" . '$$\int_{a}^{b} f(x) dx = -\int_{b}^{a} f(x) dx$$' . "\n\n" . '3. Penjumlahan Interval:' . "\n" . '$$\int_{a}^{c} f(x) dx = \int_{a}^{b} f(x) dx + \int_{b}^{c} f(x) dx$$',
-            'order' => 2,
-            'xp_reward' => 45,
-        ]);
+        // 1 & 2 are handled in DatabaseSeeder (Bab 1 & 2)
 
         // 3. Teknik Integrasi Substitusi (Topic 3)
         $t3 = $topics[2];
